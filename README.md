@@ -18,22 +18,22 @@ the format will be :
 
 ```
 {
-  "currId": 0,
-  "cheat": false
-  "lines": [
+  currId: 0,
+  cheat: false
+  lines: [
     {
-      "id": 1,
-      "title": "presentation",
-      "nextId": 2,
-      "prevId":"0",
-      "mdp": ""
+      id: 1,
+      title: "presentation",
+      nextId: 2,
+      prevId:"0",
+      mdp: ""
     },
     {
-      "id": 2,
-      "title": "map",
-      "nextId": 0,
-      "prevId":"1",
-      "mdp": "silence"
+      id: 2,
+      title: "map",
+      nextId: 0,
+      prevId:"1",
+      mdp: "silence"
     },
     ...
   ]
@@ -42,11 +42,14 @@ the format will be :
 
 ## Display
 
+L'affichage se fera avec une simple page web dynamique, les infrmations seront obtenue par un appel
+
 The display will consist in a simple dynamic page, getting information through a REST call.
 The routes will be :
 ```
 index             -- index -- .
 get_page          -- GET   -- /id?mdp=[password]
+get_page          -- GET   -- /information
 envois une ligne  -- GET   -- /manage
 envois une ligne  -- POST  -- /manage [title|nextId|prevId|mdp]
 ```
