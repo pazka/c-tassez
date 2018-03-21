@@ -1,0 +1,10 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+  <p>Tapez le mot de passe pour entrer en mode admin</p>
+  <p>{{message}}</p>
+  <form class="" action="log" method="post">
+      <input type="password" name="psw" value="">
+      <input type="submit" value="Login">
+  </form>
+{% endblock %}

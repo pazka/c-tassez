@@ -1,0 +1,92 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+<table id="allLines">
+    <th>ID</th>
+    <th>Suivant</th>
+    <th>Origine</th>
+    <th>Titre</th>
+    <th>Mot clef</th>
+    <th>Photo</th>
+    <th>Texte</th>
+    <th>EDIT</th>
+    <th>DELETE</th>
+  {% for line in allLines %}
+    <tr><form class="" action="/admin/home/add" method="post"      encType="multipart/form-data">
+        <td><input  id="{{line.id}}id" name="id" value="{{ line.id     }}"></td>
+        <td><input  id="{{line.id}}nextid" name="idnext" value="{{ line.nextId }}"></td>
+        <td><input  id="{{line.id}}previd" name="idorig" value="{{ line.prevId }}"></td>
+        <td><input  id="{{line.id}}title" name="title" value="{{ line.title  }}"></td>
+        <td><input  id="{{line.id}}mdp"  name="psw"  value="{{ line.mdp    }}"></td>
+        <!-- dynamic field -->
+        <td id="{{line.id}}img"><p id="imgname{{line.id}}"  onclick="upImg({{line.id}})" >
+             {% if line.img %}{{line.img }}{% else %} ...{% endif %}</p>
+             <input class="invisible" name="img1" id="inFile{{line.id}}" type="file">
+        </td>
+        <!-- dynamic field -->
+        <td  id="{{line.id}}desc">
+            <textarea id="descta{{line.id}}" onclick="upDesc({{line.id}})"  id="{{line.id}}txt" >  {{line.txt}}  </textarea>
+            <input class="invisible" name="txt" id="inDesc{{line.id}}" value="{{line.txt}}">
+        </td>
+        <td>
+            <input type="submit" value="edit"/>
+        </td>
+        </form>
+        <td>
+            <button onclick="del({{line.id}})"> delete</button>
+        </td>
+    </tr>
+  {% endfor %}
+</table>
+
+<table>
+    <th>ID Suivant</th>
+    <th>ID Origine</th>
+    <th>Titre</th>
+    <th>Mot clef</th>
+    <th>Photo</th>
+    <th>Texte</th>
+  <tr><form class="" action="/admin/home/add" method="post"      encType="multipart/form-data">
+      <td><input name="idnext" placeholder=""></td>
+      <td><input name="idorig" placeholder=""></td>
+      <td><input name="title" placeholder=""></td>
+      <td><input name="mdp" placeholder=""></td>
+      <td><input name="img" type="file" placeholder=""></td>
+      <td><input name="txt" ></td>
+      <td><input type="submit" value="Créer"></td>
+  </form>
+  </tr>
+</table>
+{% endblock %}
+
+{% block js %}
+
+<script type="text/javascript">
+    function upImg(id){
+        $("#imgname"+id).remove();
+        $("#"+id+"img").append($("#inFile"+id).toggleClass("invisible"));
+    }
+    var txt;
+
+    function upDesc(id){
+        $("#descta"+id).remove();
+        $("#"+id+"desc").append($("#inDesc"+id).toggleClass("invisible"));
+    }
+
+    function del(id){
+        $.post("/admin/home/remove",{id:id}).done(function( data ) {
+            window.location.reload(true);
+        });
+    }
+
+</script>
+
+{% endblock %}
+
+{% block style %}
+<style>
+.invisible{
+    display: none;
+}
+</style>
+{% endblock %}

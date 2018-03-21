@@ -1,11 +1,12 @@
 var storage = require('node-persist');
+var session = require('cookie-session');
 
 var i_currId = "currId";
 var i_pages = "lines";
 
 ctrl = {};
 
-ctrl.addRecord = function(title,nextId,prevId,mdp){
+ctrl.addRecord = function(title,nextId,prevId,mdp,imgname,txt){
     storage.initSync();
     var currId = storage.getItemSync(i_currId);
     storage.setItemSync(i_currId,currId+1);
@@ -16,14 +17,18 @@ ctrl.addRecord = function(title,nextId,prevId,mdp){
         id : currId,
         nextId:nextId,
         prevId : prevId,
-        mdp:mdp
+        mdp:mdp,
+        img:imgname ,
+        txt:txt
     };
 
     allPages.push(page);
     storage.setItemSync(i_pages,allPages);
+
+    return page;
 }
 
-ctrl.editRecord = function(id,title,nextId,prevId,mdp){
+ctrl.editRecord = function(id,title,nextId,prevId,mdp,imgname,txt){
     storage.initSync();
     var allPages = storage.getItemSync(i_pages);
 
@@ -34,7 +39,9 @@ ctrl.editRecord = function(id,title,nextId,prevId,mdp){
                 id : line.id,
                 nextId: nextId ? nextId : line.nextId,
                 prevId : prevId ? prevId : line.prevId,
-                mdp:mdp ? mdp : line.mdp
+                mdp:mdp ? mdp : line.mdp,
+                img:imgname ? imgname : line.imgname ,
+                txt:txt ? txt : line.txt
             }
         }
     }
@@ -77,7 +84,6 @@ ctrl.getRecordById = function(id){
         if (allPages[i].id == id)
             return allPages[i];
     }
-
     return null;
 }
 
@@ -85,5 +91,19 @@ ctrl.toggleCheat = function(){
     storage.initSync();
     storage.setItemSync("cheat",storage.getItemSync("cheat") ? false : true);
 }
+
+ctrl.getCheat = function(){
+    storage.initSync();
+    return storage.getItemSync("cheat");
+}
+
+ctrl.createSession = function(req){
+    req.session.user = "admin";
+};
+
+ctrl.checkSession = function(req){
+    return (req.session && req.session.user == "admin");
+};
+
 
 module.exports = ctrl;
