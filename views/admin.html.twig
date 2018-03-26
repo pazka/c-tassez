@@ -6,87 +6,190 @@
     <th>Suivant</th>
     <th>Origine</th>
     <th>Titre</th>
+    <th>Départ</th>
     <th>Mot clef</th>
-    <th>Photo</th>
-    <th>Texte</th>
+    <th>Photo1</th>
+    <th>Photo2</th>
+    <th>Texte1</th>
+    <th>Texte2</th>
     <th>EDIT</th>
     <th>DELETE</th>
-  {% for line in allLines %}
-    <tr><form class="" action="/admin/home/add" method="post"      encType="multipart/form-data">
-        <td><input  id="{{line.id}}id" name="id" value="{{ line.id     }}"></td>
+
+    {% for line in allLines %}
+    <tr><form id="edit{{line.id}}" class="" method="post" encType="multipart/form-data">
+        <td><p>{{line.id}}</p></td>
         <td><input  id="{{line.id}}nextid" name="idnext" value="{{ line.nextId }}"></td>
         <td><input  id="{{line.id}}previd" name="idorig" value="{{ line.prevId }}"></td>
         <td><input  id="{{line.id}}title" name="title" value="{{ line.title  }}"></td>
-        <td><input  id="{{line.id}}mdp"  name="psw"  value="{{ line.mdp    }}"></td>
-        <!-- dynamic field -->
+        {% if line.start == 'true' %}
+        <td><input id="{{line.id}}start" name="start" checked="true" type="checkbox"></td>
+        {% else %}
+        <td><input id="{{line.id}}start" name="start" type="checkbox"></td>
+        {% endif %}
+        <td><input  id="{{line.id}}mdp"  name="mdp"  value="{{ line.mdp  }}"></td>
+        <!-- dynamic file field -->
         <td id="{{line.id}}img"><p id="imgname{{line.id}}"  onclick="upImg({{line.id}})" >
-             {% if line.img %}{{line.img }}{% else %} ...{% endif %}</p>
-             <input class="invisible" name="img1" id="inFile{{line.id}}" type="file">
+            {% if line.img %}{{line.img }}{% else %}...{% endif %}</p>
+            <input class="invisible" name="img" id="inFile{{line.id}}" type="file">
         </td>
-        <!-- dynamic field -->
-        <td  id="{{line.id}}desc">
-            <textarea id="descta{{line.id}}" onclick="upDesc({{line.id}})"  id="{{line.id}}txt" >  {{line.txt}}  </textarea>
-            <input class="invisible" name="txt" id="inDesc{{line.id}}" value="{{line.txt}}">
+        <!-- dynamic file field -->
+        <td id="{{line.id}}img2"><p id="img2name{{line.id}}"  onclick="upImg2({{line.id}})" >
+            {% if line.img2 %}{{line.img2 }}{% else %}...{% endif %}</p>
+            <input class="invisible" name="img2" id="inFile2{{line.id}}" type="file">
         </td>
-        <td>
-            <input type="submit" value="edit"/>
-        </td>
-        </form>
-        <td>
-            <button onclick="del({{line.id}})"> delete</button>
-        </td>
-    </tr>
-  {% endfor %}
-</table>
 
+        <!-- dynamic text field -->
+        <td >
+            <div id="taf{{line.id}}" class="editText" contenteditable='true'>
+                {{line.txt}}
+            </div>
+        </td>
+        <!-- dynamic text field -->
+        <td >
+            <div id="2taf{{line.id}}" class="editText" contenteditable='true'>
+                {{line.txt2}}
+            </div>
+        </td>
+        <td>
+            <input type="submit" value="editer"/>
+        </td>
+    </form>
+    <td>
+        <button onclick="del({{line.id}})"> Suprimer</button>
+    </td>
+</tr>
+{% endfor %}
+</table>
+<hr/>
 <table>
     <th>ID Suivant</th>
     <th>ID Origine</th>
     <th>Titre</th>
     <th>Mot clef</th>
-    <th>Photo</th>
-    <th>Texte</th>
-  <tr><form class="" action="/admin/home/add" method="post"      encType="multipart/form-data">
-      <td><input name="idnext" placeholder=""></td>
-      <td><input name="idorig" placeholder=""></td>
-      <td><input name="title" placeholder=""></td>
-      <td><input name="mdp" placeholder=""></td>
-      <td><input name="img" type="file" placeholder=""></td>
-      <td><input name="txt" ></td>
-      <td><input type="submit" value="Créer"></td>
-  </form>
-  </tr>
+    <th>Départ</th>
+    <th>Photo1</th>
+    <th>Photo2</th>
+    <th>Texte1</th>
+    <th>Texte2</th>
+    <tr><form id="add" class=""  method="post" encType="multipart/form-data">
+        <td><input name="idnext" placeholder=""></td>
+        <td><input name="idorig" placeholder=""></td>
+        <td><input name="title" placeholder=""></td>
+        <td><input name="mdp" placeholder=""></td>
+        <td><input id="start" name="start" type="checkbox"></td>
+        <td><input name="img" type="file" placeholder=""></td>
+        <td><input name="img2" type="file" placeholder=""></td>
+        <td><div id="taf" class="editText" contenteditable='true'></div></td>
+        <td><div id="2taf" class="editText" contenteditable='true'></div></td>
+        <td><input type="submit" value="Créer"></td>
+    </form>
+</tr>
 </table>
+<button onclick="tog()"> Controlle par mdp (actuellement {{cheat}})</button>
+<hr/>
+<button modal=true onclick="res()"> Tout suprimer</button>
+
 {% endblock %}
 
 {% block js %}
 
 <script type="text/javascript">
-    function upImg(id){
-        $("#imgname"+id).remove();
-        $("#"+id+"img").append($("#inFile"+id).toggleClass("invisible"));
-    }
-    var txt;
+function upImg(id){
+    $("#imgname"+id).remove();
+    $("#inFile"+id).toggleClass("invisible")
+}
+function upImg2(id){
+    $("#img2name"+id).remove();
+    $("#inFile2"+id).toggleClass("invisible")
+}
 
-    function upDesc(id){
-        $("#descta"+id).remove();
-        $("#"+id+"desc").append($("#inDesc"+id).toggleClass("invisible"));
-    }
+function del(id){
+    $.post("/admin/home/remove",{id:id}).done(function( data ) {
+        window.location.reload(true);
+    });
+}
 
-    function del(id){
-        $.post("/admin/home/remove",{id:id}).done(function( data ) {
-            window.location.reload(true);
+function tog(id){
+    $.post("/admin/home/cheat",{id:id}).done(function( data ) {
+        window.location.reload(true);
+    });
+}
+
+function res(){
+    if(!confirm("Tu es sure de vouloir tout suprimmer ?"))
+        return;
+
+    $.post("/admin/home/reset").done(function( data ) {
+        window.location.reload(true);
+    });
+}
+
+
+//********************* All Edit form
+{% for line in allLines %}
+    $("form#edit{{line.id}}").submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("id",{{line.id}});
+        formData.append("txt",$("#taf{{line.id}}").html());
+        formData.append("txt2",$("#2taf{{line.id}}").html());
+        formData.delete("start");
+        formData.append("start",$("#{{line.id}}start").prop('checked'));
+
+        $.ajax({
+            url: "/admin/home/edit" ,
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                window.location.reload(true);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
         });
-    }
+    });
+{% endfor %}
 
+
+//********************* Add form
+$("form#add").submit(function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    formData.append("txt",$("#taf").html());
+    formData.append("txt2",$("#2taf").html());
+    formData.delete("start");
+    formData.append("start",$("#start").prop('checked'));
+
+    $.ajax({
+        url: "/admin/home/add",
+        type: 'POST',
+        data: formData,
+        success: function (data) {
+            window.location.reload(true);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+});
+
+function copy(ids,idd){
+    $(idd).val($(ids));
+}
 </script>
 
 {% endblock %}
 
 {% block style %}
 <style>
-.invisible{
-    display: none;
+
+.editText{
+    width: 400px;
+    height: 100px;
+    border: 1px solid black;
+    overflow: scroll;
+    display: inline-block;
+    vertical-align: top;
 }
 </style>
 {% endblock %}

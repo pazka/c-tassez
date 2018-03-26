@@ -6,7 +6,7 @@ var i_pages = "lines";
 
 ctrl = {};
 
-ctrl.addRecord = function(title,nextId,prevId,mdp,imgname,txt){
+ctrl.addRecord = function(title,nextId,prevId,mdp,start,imgname,img2name,txt,txt2){
     storage.initSync();
     var currId = storage.getItemSync(i_currId);
     storage.setItemSync(i_currId,currId+1);
@@ -18,8 +18,11 @@ ctrl.addRecord = function(title,nextId,prevId,mdp,imgname,txt){
         nextId:nextId,
         prevId : prevId,
         mdp:mdp,
+        start:start,
         img:imgname ,
-        txt:txt
+        img2:img2name ,
+        txt:txt,
+        txt2:txt2
     };
 
     allPages.push(page);
@@ -28,20 +31,25 @@ ctrl.addRecord = function(title,nextId,prevId,mdp,imgname,txt){
     return page;
 }
 
-ctrl.editRecord = function(id,title,nextId,prevId,mdp,imgname,txt){
+ctrl.editRecord = function(_id,_title,_nextId,_prevId,_mdp,_start,_imgname,_img2name,_txt,_txt2){
     storage.initSync();
     var allPages = storage.getItemSync(i_pages);
 
-    for (var line in allPages) {
-        if (line.id == id) {
-            allPages[indexOf(line)] = {
-                title: title ? title : line.title,
-                id : line.id,
-                nextId: nextId ? nextId : line.nextId,
-                prevId : prevId ? prevId : line.prevId,
-                mdp:mdp ? mdp : line.mdp,
-                img:imgname ? imgname : line.imgname ,
-                txt:txt ? txt : line.txt
+    for (var i = 0; i < allPages.length; i++) {
+        var line = allPages[i];
+        if (line.id == _id) {
+
+            allPages[i] = {
+                title: _title!=null ? _title : line.title,
+                id : _id,
+                nextId: _nextId!=null ? _nextId : line.nextId,
+                prevId : _prevId!=null ? _prevId : line.prevId,
+                mdp:_mdp!=null  ? _mdp : line.mdp,
+                start:_start!=null ? _start : line.start,
+                img:_imgname!=null ? _imgname : line.img ,
+                img2:_img2name!=null ? _img2name : line.img2 ,
+                txt:_txt!=null ? _txt : line.txt ,
+                txt2:_txt2!=null ? _txt2 : line.txt2
             }
         }
     }
@@ -60,7 +68,7 @@ ctrl.deleteRecord = function(id){
     }
 
     if (index > -1) {
-        array.splice(index, 1);
+        allPages.splice(index, 1);
     }
 
     storage.setItemSync(i_pages,allPages);
@@ -80,6 +88,7 @@ ctrl.resetRecord = function(){
 
 ctrl.getRecordById = function(id){
     storage.initSync();
+    var allPages = storage.getItemSync(i_pages);
     for (var i = 0; i < allPages.length; i++) {
         if (allPages[i].id == id)
             return allPages[i];
@@ -101,9 +110,25 @@ ctrl.createSession = function(req){
     req.session.user = "admin";
 };
 
+ctrl.setPageSession = function(req,id){
+    req.session.pageId = id;
+};
+
+ctrl.getPageSession = function(req){
+    return req.session.pageId;
+};
+
 ctrl.checkSession = function(req){
     return (req.session && req.session.user == "admin");
 };
 
+ctrl.isAccessValid = function(req,mdp){
+    //get where user is supposed to go
+    var line = ctrl.getRecordById(ctrl.getPageSession(req));
+    var lineNext = ctrl.getRecordById(line.nextId);
+
+    //answer
+    return lineNext.mdp == mdp;
+}
 
 module.exports = ctrl;

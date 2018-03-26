@@ -3,13 +3,19 @@
   <head>
     <title>{{ title }}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    {% block stylesheet %}{% endblock %}
   </head>
   <body>
-      <h1>C-TASSEZ</h1>
     {% block body %}{% endblock %}
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
      {% block js %}{% endblock %}
-     {% block style %}{% endblock %}
   </body>
+
+  <style>
+    .invisible{
+          display: none;
+      }
+  </style>
+  {% block style %}{% endblock %}
 
 </html>

@@ -4,10 +4,15 @@ var ctrl = require('../controller/ctrl');
 var router = express.Router();
 
 
+router.get('/',function(req,res,next){
+    res.redirect('/admin/home');
+});
+
 router.get('/log',function(req,res,next){
     res.render('login.twig');
 });
 router.post('/log',function(req,res,next){
+    //TODO ENV PASSWORD
     if(req.body.psw == "test"){
         ctrl.createSession(req);
         res.redirect('/admin/home');
@@ -26,38 +31,62 @@ router.use('/home',function(req,res,next){
 
 /* GET users listing. */
 router.get('/home', function(req, res, next) {
-    res.render('admin.html.twig',{allLines : ctrl.getAllrecord()});
+    res.render('admin.html.twig',{allLines : ctrl.getAllrecord(),cheat:ctrl.getCheat()});
 });
 
 router.post('/home/add', function(req, res, next) {
-        var serverPath = "./public/img/";
-        var clientPath = "./img/";
-        var baseExt = ".jpg";
+    var serverPath = "./public/img/";
+    var clientPath = "./img/";
+    var baseExt = ".jpg";
 
-        //if id then update
-        console.log(req.body);
-        console.log(req.files);
+    //else jsute create
+    var line = ctrl.addRecord(req.body.title,req.body.idnext,req.body.idorig,req.body.mdp,req.body.start,null, null,req.body.txt,req.body.txt2);
 
-        if(req.body.id){
-            ctrl.editRecord(req.body.title,req.body.idnext,req.body.idorig,req.body.mdp, null,req.body.txt);
 
-            if(req.files.img != null){
-                req.files.img.mv(serverPath + req.body.id + baseExt);
-                ctrl.editRecord(req.body.title,req.body.idnext,req.body.idorig,req.body.mdp,req.files.img.name,req.body.txt);
-            }
-            res.redirect('/admin/home');
-            return;
+    if(req.files){
+        if(req.files.img){
+            ctrl.editRecord(line.id,null,null,null,null,null,req.files.img.name,null,null,null);
+            req.files.img.mv(serverPath + line.id + baseExt);
         }
-        //else jsute create
-        var line = ctrl.addRecord(req.body.title,req.body.idnext,req.body.idorig,req.body.mdp, req.files.img.name,req.body.txt);
-        req.files.img.mv(serverPath + line.id + baseExt);
 
-        res.redirect('/admin/home');
+        if(req.files.img2){
+            ctrl.editRecord(line.id,null,null,null,null,null,null,req.files.img2.name,null,null);
+            req.files.img2.mv(serverPath + line.id+"_sec" + baseExt);
+        }
+    }
+    res.redirect('/admin/home');
+});
+
+
+router.post('/home/edit', function(req, res, next) {
+    var serverPath = "./public/img/";
+    var clientPath = "./img/";
+    var baseExt = ".jpg";
+
+        console.log(req.body);
+    ctrl.editRecord(req.body.id,req.body.title,req.body.idnext,req.body.idorig,req.body.mdp,req.body.start, null,null,req.body.txt,req.body.txt2);
+
+    if(req.files.img){
+        req.files.img.mv(serverPath + req.body.id + baseExt);
+        ctrl.editRecord(req.body.id,null,null,null,null,null,req.files.img.name,null,null,null);
+    }
+    if(req.files.img2){
+        req.files.img2.mv(serverPath + req.body.id +"_sec"+ baseExt);
+        ctrl.editRecord(req.body.id,null,null,null,null,null,null,req.files.img2.name,null,null);
+    }
+    res.redirect('/admin/home');
 });
 
 router.post('/home/remove', function(req, res, next) {
-        //if id then update
+    //if id then update
     ctrl.deleteRecord(req.body.id);
+
+    res.send('ok');
+});
+
+router.post('/home/reset', function(req, res, next) {
+    //if id then update
+    ctrl.resetRecord();
 
     res.send('ok');
 });
