@@ -3,6 +3,8 @@
   <head>
     <title>{{ title }}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/normalize.css' />
+    <link rel='stylesheet' href='/stylesheets/skeleton.css' />
     {% block stylesheet %}{% endblock %}
   </head>
   <body>
@@ -13,8 +15,8 @@
 
   <style>
     .invisible{
-          display: none;
-      }
+          display: none !important;
+    }
   </style>
   {% block style %}{% endblock %}
 

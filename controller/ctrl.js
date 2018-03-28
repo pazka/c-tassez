@@ -6,7 +6,7 @@ var i_pages = "lines";
 
 ctrl = {};
 
-ctrl.addRecord = function(title,nextId,prevId,mdp,start,imgname,img2name,txt,txt2){
+ctrl.addRecord = function(title,nextId,mdp,start,imgname,img2name,txt,txt2){
     storage.initSync();
     var currId = storage.getItemSync(i_currId);
     storage.setItemSync(i_currId,currId+1);
@@ -16,7 +16,6 @@ ctrl.addRecord = function(title,nextId,prevId,mdp,start,imgname,img2name,txt,txt
         title:title,
         id : currId,
         nextId:nextId,
-        prevId : prevId,
         mdp:mdp,
         start:start,
         img:imgname ,
@@ -31,7 +30,7 @@ ctrl.addRecord = function(title,nextId,prevId,mdp,start,imgname,img2name,txt,txt
     return page;
 }
 
-ctrl.editRecord = function(_id,_title,_nextId,_prevId,_mdp,_start,_imgname,_img2name,_txt,_txt2){
+ctrl.editRecord = function(_id,_title,_nextId,_mdp,_start,_imgname,_img2name,_txt,_txt2){
     storage.initSync();
     var allPages = storage.getItemSync(i_pages);
 
@@ -43,7 +42,6 @@ ctrl.editRecord = function(_id,_title,_nextId,_prevId,_mdp,_start,_imgname,_img2
                 title: _title!=null ? _title : line.title,
                 id : _id,
                 nextId: _nextId!=null ? _nextId : line.nextId,
-                prevId : _prevId!=null ? _prevId : line.prevId,
                 mdp:_mdp!=null  ? _mdp : line.mdp,
                 start:_start!=null ? _start : line.start,
                 img:_imgname!=null ? _imgname : line.img ,
@@ -127,8 +125,9 @@ ctrl.isAccessValid = function(req,mdp){
     var line = ctrl.getRecordById(ctrl.getPageSession(req));
     var lineNext = ctrl.getRecordById(line.nextId);
 
+    console.log(ctrl.getCheat());
     //answer
-    return lineNext.mdp == mdp;
+    return ctrl.getCheat() || lineNext.mdp == mdp;
 }
 
 module.exports = ctrl;

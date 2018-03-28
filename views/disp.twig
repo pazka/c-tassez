@@ -5,29 +5,31 @@
 {% endblock %}
 
 {% block body %}
-    <div id="imgtxt" class="imgtxt dh-container">
-        <img src="img/{{line.id}}.jpg" alt="Image de l'expo">   
-        <div class="ftxt">
-            {{line.txt}}
+    <div id="imgtxt" class="dh-container imgtxt " onclick="toggleMdp()">
+        <div class="flexcenter">
+            <img id="img1" src="img/{{line.id}}.jpg" alt="Image de l'expo"/>
+            <div class="ftxt">
+                {{line.txt}}
+            </div>
         </div>
 
-        <div class="imgtxt dh-overlay">
-            <img src="img/{{line.id}}_sec.jpg" alt="Image de l'expo">
-            <div id="txt2" class="ftxt">
+        <div id="innertxtimg" class="imgtxt_sec dh-overlay flexcenter">
+            <img id="img2" src="img/{{line.id}}_sec.jpg" alt="Image de l'expo"/>
+            <div class="ftxt">
                 {{line.txt2}}
             </div>
         </div>
     </div>
 
-    <div id="cont_messbox" >
+    <div id="cont_messbox" class="invisible">
         <div id="child_messbox">
-            <p id="mess" class="mess invisible"></p>
-            <img id="loadgif" class="invisible" src="images/fr_wave.agif" alt="gif de chargement">
             <form id="next" class="" action="/" method="post">
-                <label for="mdp">Mot de passe : </label>
+                <h2 for="mdp">Mot de passe : </h2>
                 <input id = "i_mdp" type="mdp" name="mdp" >
                 <input type="submit" value="Suivant" >
             </form>
+            <p id="mess" class="mess invisible"></p>
+            <img id="loadgif" class="invisible" src="images/fr_wave.agif" alt="gif de chargement">
         </div>
     </div>
 {% endblock %}
@@ -64,6 +66,20 @@
             });
         });
 
+        var on = false;
+        function toggleMdp(){
+            on = on ? false : true;
+
+            if(on){
+                $("#cont_messbox").toggleClass("invisible");
+                $("#cont_messbox").animate({ opacity: 1 }, 700);
+            }else{
+                $("#cont_messbox").animate({ opacity: 0 }, 700,"swing",function(){
+                    $("#cont_messbox").toggleClass("invisible");
+                });
+            }
+        }
+
         $('.dh-container').directionalHover({
 
           // CSS class for the overlay
@@ -83,43 +99,82 @@
 
 {% block style %}
 <style>
-#imgtxt{
-    border:  solid 1px black;
+body{
+    padding: 0px;
+}
+
+.imgtxt{
     margin: 25%;
-    margin-top: 10%;
+    margin-top: 2%;
     margin-bottom: 0%;
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+}
+.imgtxt_sec{
+    background-color: white;
+    margin-top: 0%;
+    margin-bottom: 0%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 img{
-    max-height: 50vh;
+    align-self: center;
+    max-height: 60vh;
+}
+
+#img2{
+    margin: 25%;
+    margin-top: 0%;
+    margin-bottom: 0%;
+}
+
+
+.flexcenter{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .ftxt{
     width: 100%;
+    height: 100%;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    text-align: justify;
+
 }
 
 #cont_messbox{
     position: absolute;
-    top: 50%;
-    left: 50%;
+    background-color: white;
+    top: 20%;
+    left:35%;
+    right:35%;
+    width : 30%;
+    height: 30%;
+    opacity: 0;
+    -webkit-box-shadow: 10px 10px 18px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 18px -4px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 18px -4px rgba(0,0,0,0.75);
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+      padding-top: 3%;
 }
 
 #child_messbox{
-    border: solid black 1px;
-    position: relative;
-    left: -50%;
+  display: inline-block;
 }
 
-.dh-container {
-  position: relative;
-  overflow: hidden;
-}
 
-.dh-overlay {
-  position: absolute;
-  top: -100%;
+#loadgif{
+    height : 5%;
+    width: auto;
 }
 
 </style>

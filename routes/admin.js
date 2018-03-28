@@ -40,17 +40,17 @@ router.post('/home/add', function(req, res, next) {
     var baseExt = ".jpg";
 
     //else jsute create
-    var line = ctrl.addRecord(req.body.title,req.body.idnext,req.body.idorig,req.body.mdp,req.body.start,null, null,req.body.txt,req.body.txt2);
+    var line = ctrl.addRecord(req.body.title,req.body.idnext,req.body.mdp,req.body.start,null, null,req.body.txt,req.body.txt2);
 
 
     if(req.files){
         if(req.files.img){
-            ctrl.editRecord(line.id,null,null,null,null,null,req.files.img.name,null,null,null);
+            ctrl.editRecord(line.id,null,null,null,null,req.files.img.name,null,null,null);
             req.files.img.mv(serverPath + line.id + baseExt);
         }
 
         if(req.files.img2){
-            ctrl.editRecord(line.id,null,null,null,null,null,null,req.files.img2.name,null,null);
+            ctrl.editRecord(line.id,null,null,null,null,null,req.files.img2.name,null,null);
             req.files.img2.mv(serverPath + line.id+"_sec" + baseExt);
         }
     }
@@ -64,15 +64,15 @@ router.post('/home/edit', function(req, res, next) {
     var baseExt = ".jpg";
 
         console.log(req.body);
-    ctrl.editRecord(req.body.id,req.body.title,req.body.idnext,req.body.idorig,req.body.mdp,req.body.start, null,null,req.body.txt,req.body.txt2);
+    ctrl.editRecord(req.body.id,req.body.title,req.body.idnext,req.body.mdp,req.body.start, null,null,req.body.txt,req.body.txt2);
 
     if(req.files.img){
         req.files.img.mv(serverPath + req.body.id + baseExt);
-        ctrl.editRecord(req.body.id,null,null,null,null,null,req.files.img.name,null,null,null);
+        ctrl.editRecord(req.body.id,null,null,null,null,req.files.img.name,null,null,null);
     }
     if(req.files.img2){
         req.files.img2.mv(serverPath + req.body.id +"_sec"+ baseExt);
-        ctrl.editRecord(req.body.id,null,null,null,null,null,null,req.files.img2.name,null,null);
+        ctrl.editRecord(req.body.id,null,null,null,null,null,req.files.img2.name,null,null);
     }
     res.redirect('/admin/home');
 });

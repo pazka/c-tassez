@@ -4,7 +4,6 @@
 <table id="allLines">
     <th>ID</th>
     <th>Suivant</th>
-    <th>Origine</th>
     <th>Titre</th>
     <th>Départ</th>
     <th>Mot clef</th>
@@ -17,9 +16,8 @@
 
     {% for line in allLines %}
     <tr><form id="edit{{line.id}}" class="" method="post" encType="multipart/form-data">
-        <td><p>{{line.id}}</p></td>
+        <td><p id="idtd">{{line.id}}</p></td>
         <td><input  id="{{line.id}}nextid" name="idnext" value="{{ line.nextId }}"></td>
-        <td><input  id="{{line.id}}previd" name="idorig" value="{{ line.prevId }}"></td>
         <td><input  id="{{line.id}}title" name="title" value="{{ line.title  }}"></td>
         {% if line.start == 'true' %}
         <td><input id="{{line.id}}start" name="start" checked="true" type="checkbox"></td>
@@ -63,7 +61,6 @@
 <hr/>
 <table>
     <th>ID Suivant</th>
-    <th>ID Origine</th>
     <th>Titre</th>
     <th>Mot clef</th>
     <th>Départ</th>
@@ -73,7 +70,6 @@
     <th>Texte2</th>
     <tr><form id="add" class=""  method="post" encType="multipart/form-data">
         <td><input name="idnext" placeholder=""></td>
-        <td><input name="idorig" placeholder=""></td>
         <td><input name="title" placeholder=""></td>
         <td><input name="mdp" placeholder=""></td>
         <td><input id="start" name="start" type="checkbox"></td>
@@ -182,6 +178,10 @@ function copy(ids,idd){
 
 {% block style %}
 <style>
+
+#idtd{
+    font-weight: bold;
+}
 
 .editText{
     width: 400px;

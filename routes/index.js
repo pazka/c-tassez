@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
     var line = ctrl.getRecordById(id);
 
     //not starting page
-    if( !line || line.start != 'true'){
+    if( !line || line.start != 'true' ){
         return res.render("wrong.twig");
     }
 
