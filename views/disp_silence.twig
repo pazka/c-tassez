@@ -1,0 +1,150 @@
+{% extends 'layout.twig' %}
+
+{% block stylesheet %}
+<link rel='stylesheet' href='/stylesheets/dh.min.css' />
+<link href="/silence/css/bootstrap.css" rel="stylesheet">
+<link href="/silence/style.css" rel="stylesheet">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+{% endblock %}
+
+{% block body %}
+<p id="toright" onclick="toggleinnertxtimg()">></p>
+
+<div id="cont" class="flexcenter imgtxt ">
+    <div id="innertxtimg" class="imgtxt flexcenter slideout" onclick="toggleMdp()" >
+        <img id="img" src="img/{{line.id}}_sec.jpg" alt="Image de l'expo"/>
+        <div class="ftxt">
+            {{line.txt2}}
+        </div>
+    </div>
+        <div class="controls">
+            <h1>Silence Map</h1>
+            <div class="btns">
+                <button type="button" class="btn-circle btn-lg" onclick="showForm()">+</button>
+                <button type="button" class="btn-circle btn-lg" onclick="showHelp()">?</button>
+            </div>
+        </div>
+
+        <div id="map"></div>
+        <audio id="player"></audio>
+
+        <div id="add">
+            <div>
+                <button type="button" class="quit" onclick="showForm()">X</button>
+                <h2>Add a Silence</h2>
+                <form ref='uploadForm'
+                id='uploadForm'
+                method='post'
+                encType="multipart/form-data">
+                    <p><label for="name">Name</label> <input type="text" name="name" /></p>
+                    <p><label for="adr">Adress</label> <input required type="text" name="adr" /></p>
+                    <p><label for="lon">Longitude</label> <input required type="number" step=any name="lon" id="lon"/></p>
+                    <p><label for="lat">Latitude</label><input required type="number" step=any name="lat" id="lat"/></p>
+                    <p><button class="btn" type="button" name="getLoc" onclick="getLocalisation()">Your Localisation</button>
+                        <button class="btn" type="button" name="getMapLoc" onclick="getMapLocalisation()">Localisation from map</button></p>
+                        <p><input class="btn" required accept=".mp3" type="file" name="sound" id="file"/></p>
+                        <p><input class="btn" type='submit' value='upload' />
+                </form>
+            </div>
+        </div>
+        <div id="help">
+            <div >
+                <button type="button" class="quit" onclick="showHelp()">X</button>
+                <h2>Explanations</h2>
+                <p>Welcome to the Silence map!!</p>
+                <p>Here you can post the quiet place around you like this:</p>
+                </br>
+                <p>Step 1: Record a noise somewhere around you</p>
+                <p>Step 2: Find on Google Street View the street where was your silence and take the geolocation code.</p>
+                <p>Step 3: Fill out the form.</p>
+                </br>
+                <p>You can also enjoy the silence around the world by you clicking on the differents markers displayed on the map.</p>
+            </div>
+        </div>
+
+</div>
+
+<div id="cont_messbox" class="invisible">
+    <div id="child_messbox">
+        <form id="next" class="" action="/" method="post">
+            <h2 for="mdp">Mot de passe : </h2>
+            <input id = "i_mdp" type="mdp" name="mdp" >
+            <input type="submit" value="Suivant" >
+        </form>
+        <p id="mess" class="mess invisible"></p>
+        <img id="loadgif" class="invisible" src="images/fr_wave.agif" alt="gif de chargement">
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+
+
+<script type="text/javascript" src="silence/mapStyle.js"></script>
+<script type="text/javascript" src="silence/map.js"></script>
+<script type="text/javascript" src="silence/js/bootstrap.js"></script>
+<script type="text/javascript" src="silence/js/bootstrap.bundle.js"></script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVBPnK06zE4EVfcvXzWtVfjBTRASMP21c&callback=initMap">
+</script>
+<script type="text/javascript" src="/javascripts/dh.silence.min.js"></script>
+<script type="text/javascript">
+//https://www.jqueryscript.net/animation/Mouse-Direction-aware-jQuery-Hover-Effect-Plugin-Directional-Hover.html
+var t = 0;
+
+function askServer(mdp,callback,callfail){
+    $("#loadgif").toggleClass("invisible");
+    $.post("/check",{mdp:mdp},function(data){
+        $("#loadgif").toggleClass("invisible");
+        if(data=='OK')
+        callback();
+        else
+        callfail();
+    });
+}
+
+function displayIncMess(mess){
+    $("#mess").removeClass("invisible");
+    $("#mess").html("Éssai n°"+ ++t + " : " +mess);
+}
+
+$("form#next").submit(function(e) {
+    e.preventDefault();
+    askServer($("#i_mdp").val(),
+    function(){
+        $("form#next").unbind('submit').submit()},
+        function(){
+            displayIncMess("Mauvais mot de passe.");
+        });
+    });
+
+    var on = false;
+    var toggleMdp = function(e){
+        on = on ? false : true;
+        if(on){
+            $("#cont_messbox").toggleClass("invisible");
+            $("#cont_messbox").animate({ opacity: 1 }, 700);
+        }else{
+            $("#cont_messbox").animate({ opacity: 0 }, 700,"swing",function(){
+                $("#cont_messbox").toggleClass("invisible");
+            });
+        }
+        e.stopPropagation();
+    };
+
+    //$("#cont_messbox").click(toggleMdp);
+
+    $('.dh-container').directionalHover({
+
+        // CSS class for the overlay
+        overlay: "dh-overlay",
+
+        // Linear or swing
+        easing: "swing",
+
+        // <a href="https://www.jqueryscript.net/animation/">Animation</a> speed in ms
+        speed: 400
+
+    });
+    </script>
+    {% endblock %}

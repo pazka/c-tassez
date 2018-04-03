@@ -53,3 +53,26 @@ get_page          -- GET   -- /information
 envois une ligne  -- GET   -- /manage
 envois une ligne  -- POST  -- /manage [title|nextId|prevId|mdp]
 ```
+
+
+## Special Setup
+
+I have only one VPS to host several website (espacialy SilenceMap and my future CVs) so O used a node module called "http-multi-site" and modified the file
+/usr/lib/node_modules/http-multi-site/proxy.json with this :
+```
+{
+  "hostnameOnly": "true",
+  "domains": {
+    "silencemap.xyz": {
+       "hostport": "localhost:3000",
+       "dir": "/root/server/SilenceMap
+    },
+    "cetassez.fr": {
+       "hostport": "localhost:3001",
+       "dir": "/root/cetassez"
+    }
+  }
+}
+```
+
+And I should be good to go !

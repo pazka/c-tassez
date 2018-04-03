@@ -9,6 +9,7 @@ const fileUpload = require('express-fileupload');
 
 var index = require('./routes/index');
 var admin = require('./routes/admin');
+var api = require('./routes/api');
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/admin',admin);
+app.use('/silence',api);
 
 
 // catch 404 and forward to error handler

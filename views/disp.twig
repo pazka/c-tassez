@@ -35,7 +35,7 @@
 {% endblock %}
 
 {% block js %}
-    <script type="text/javascript" src="javascripts/dh.min.js"></script>
+    <script type="text/javascript" src="/javascripts/dh.min.js"></script>
     <script type="text/javascript">
     //https://www.jqueryscript.net/animation/Mouse-Direction-aware-jQuery-Hover-Effect-Plugin-Directional-Hover.html
         var t = 0;
@@ -67,9 +67,8 @@
         });
 
         var on = false;
-        function toggleMdp(){
+        var toggleMdp = function(e){
             on = on ? false : true;
-
             if(on){
                 $("#cont_messbox").toggleClass("invisible");
                 $("#cont_messbox").animate({ opacity: 1 }, 700);
@@ -78,7 +77,10 @@
                     $("#cont_messbox").toggleClass("invisible");
                 });
             }
-        }
+            e.stopPropagation();
+        };
+
+        //$("#cont_messbox").click(toggleMdp);
 
         $('.dh-container').directionalHover({
 
@@ -105,7 +107,7 @@ body{
 
 .imgtxt{
     margin: 25%;
-    margin-top: 2%;
+    margin-top: 10%;
     margin-bottom: 0%;
     display: flex;
     flex-direction: column;

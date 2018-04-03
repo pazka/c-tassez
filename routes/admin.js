@@ -25,8 +25,9 @@ router.post('/log',function(req,res,next){
 router.use('/home',function(req,res,next){
     if(!ctrl.checkSession(req)){
         res.redirect('/admin/log');
-    }else
+    }else{
         next();
+    }
 });
 
 /* GET users listing. */
@@ -57,13 +58,11 @@ router.post('/home/add', function(req, res, next) {
     res.redirect('/admin/home');
 });
 
-
 router.post('/home/edit', function(req, res, next) {
     var serverPath = "./public/img/";
     var clientPath = "./img/";
     var baseExt = ".jpg";
 
-        console.log(req.body);
     ctrl.editRecord(req.body.id,req.body.title,req.body.idnext,req.body.mdp,req.body.start, null,null,req.body.txt,req.body.txt2);
 
     if(req.files.img){

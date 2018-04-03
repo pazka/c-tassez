@@ -9,13 +9,16 @@ router.get('/', function(req, res, next) {
     var line = ctrl.getRecordById(id);
 
     //not starting page
-    if( !line || line.start != 'true' ){
+    if( !line || line.id != 0 ){
         return res.render("wrong.twig");
     }
 
     //starting page
     ctrl.setPageSession(req,id);
-    res.render("disp.twig",{line:line});
+    if(line.start == 'true')
+        res.render("disp_silence.twig",{line:line});
+    else
+        res.render("disp.twig",{line:line});
 });
 
 
@@ -29,7 +32,10 @@ router.post('/', function(req, res, next) {
     var lineNext = ctrl.getRecordById(line.nextId);
 
     ctrl.setPageSession(req,lineNext.id);
-    return res.render("disp.twig",{line:lineNext});
+    if(line.start == 'true')
+        res.render("disp_silence.twig",{line:line});
+    else
+        res.render("disp.twig",{line:line});
 });
 
 router.post('/check', function(req, res, next) {
