@@ -32,10 +32,10 @@ router.post('/', function(req, res, next) {
     var lineNext = ctrl.getRecordById(line.nextId);
 
     ctrl.setPageSession(req,lineNext.id);
-    if(line.start == 'true')
-        res.render("disp_silence.twig",{line:line});
+    if(lineNext.start == 'true')
+        res.render("disp_silence.twig",{line:lineNext});
     else
-        res.render("disp.twig",{line:line});
+        res.render("disp.twig",{line:lineNext});
 });
 
 router.post('/check', function(req, res, next) {
