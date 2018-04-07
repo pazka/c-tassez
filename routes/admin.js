@@ -13,7 +13,7 @@ router.get('/log',function(req,res,next){
 });
 router.post('/log',function(req,res,next){
     //TODO ENV PASSWORD
-    if(req.body.psw == "test"){
+    if(req.body.psw == "cetassez2018"){
         ctrl.createSession(req);
         res.redirect('/admin/home');
         return;
