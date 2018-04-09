@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block body %}
+<div id="prop">
 <p id="toright" onclick="toggleinnertxtimg()">></p>
 
 <div id="cont" class="flexcenter imgtxt ">
@@ -63,17 +64,6 @@
         </div>
 
 </div>
-
-<div id="cont_messbox" class="invisible">
-    <div id="child_messbox">
-        <form id="next" class="" action="/" method="post">
-            <h2 for="mdp">Mot de passe : </h2>
-            <input id = "i_mdp" type="mdp" name="mdp" >
-            <input type="submit" value="Suivant" >
-        </form>
-        <p id="mess" class="mess invisible"></p>
-        <img id="loadgif" class="invisible" src="images/fr_wave.agif" alt="gif de chargement">
-    </div>
 </div>
 {% endblock %}
 
@@ -102,6 +92,10 @@ function askServer(mdp,callback,callfail){
         callfail();
     });
 }
+
+$("#prop").click(function(e){
+    e.stopPropagation();
+})
 
 function displayIncMess(mess){
     $("#mess").removeClass("invisible");

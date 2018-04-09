@@ -160,11 +160,10 @@ img{
 #cont_messbox{
     position: absolute;
     background-color: rgba(255,255,255,0.8);
-    top: 20%;
-    left:25%;
-    right:35%;
-    width : 50%;
-    height: 40%;
+    top: 10%;
+    left:22%;
+    width : 55%;
+    height: 80%;
     opacity: 0;
     -webkit-box-shadow: 4px 4px 24px -4px rgba(0,0,0,0.3);
     -moz-box-shadow: 4px 4px 24px -4px rgba(0,0,0,0.3);
