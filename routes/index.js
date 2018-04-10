@@ -32,7 +32,7 @@ router.post('/', function(req, res, next) {
     var lineNext = ctrl.getRecordById(line.nextId);
 
     ctrl.setPageSession(req,lineNext.id);
-    if(lineNext.start == 'true')
+if(lineNext.start == 'true')
         res.render("disp_silence.twig",{line:lineNext});
     else
         res.render("disp.twig",{line:lineNext});

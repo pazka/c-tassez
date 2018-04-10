@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 node_modules
 persist
 public/img
+=======
+node_modules/*
+public/img/*
+.node-persist
+>>>>>>> 8aa727e5c2ef4d8ed4083c50b3f3cc7c60ffb782
