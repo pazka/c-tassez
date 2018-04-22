@@ -109,7 +109,6 @@ ctrl.createSession = function(req){
 };
 
 ctrl.setPageSession = function(req,id){
-    console.log("I put " +id +"into session");
     req.session.pageId = id;
 };
 
@@ -125,7 +124,6 @@ ctrl.isAccessValid = function(req,mdp){
     //get where user is supposed to go
     var line = ctrl.getRecordById(ctrl.getPageSession(req));
     var lineNext = ctrl.getRecordById(line.nextId);
-        console.log("I check session with ID " + line.id +" for mdp : " + lineNext.mdp);
 
     console.log(ctrl.getCheat());
     //answer
