@@ -1,11 +1,11 @@
 
 .markers{
   position:absolute;
-  width:20%;
+  width:16%;
   left: 0;
   right: 0;
   margin: 0 auto;
-  bottom: 5px;
+  bottom: 20px;
 }
 
 .marker{
