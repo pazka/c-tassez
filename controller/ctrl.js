@@ -6,6 +6,11 @@ var i_pages = "lines";
 
 ctrl = {};
 
+ctrl.getLastId = function(){
+    storage.initSync();
+    return storage.getItemSync(i_currId);
+}
+
 ctrl.addRecord = function(title,nextId,mdp,start,imgname,img2name,txt,txt2){
     storage.initSync();
     var currId = storage.getItemSync(i_currId);

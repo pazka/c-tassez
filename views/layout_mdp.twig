@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cétassez</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/normalize.css' />
+    <link rel='stylesheet' href='/stylesheets/skeleton.css' />
+    <link rel='stylesheet' href='/stylesheets/disp.css' />
+    {% block stylesheet %}{% endblock %}
+  </head>
+  <body >
+      <div class="markers">
+          {% for i in range(0,maxId -1) %}{% if i == line.id %}<img class="marker" src="images/fill_mark.png" alt="filled_marker">{% else %}<img class="marker" src="images/empty_mark.png" alt="empty_marker">{% endif %}{% endfor %}
+      </div>
+      <div onclick="toggleMdp()">
+        {% block body %}{% endblock %}
+      </div>
+      <div id="cont_messbox" class="invisible">
+          <div id="child_messbox">
+              <form id="next" class="" action="/" method="post">
+                  <h2 for="mdp">Mot de passe : </h2>
+                  <input id = "i_mdp" type="password" name="mdp" >
+                  <input type="submit" value="Suivant" >
+              </form>
+              <p id="mess" class="mess invisible"></p>
+              <img id="loadgif" class="invisible" src="images/fr_wave.agif" alt="gif de chargement">
+          </div>
+      </div>
+      <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+      {% block js %}{% endblock %}
+  </body>
+
+  <style>
+    .invisible{
+          display: none !important;
+    }
+    .marker{
+        width : {{ 100/maxId }}%;
+    }
+  </style>
+  {% block style %}{% endblock %}
+
+</html>

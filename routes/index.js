@@ -16,9 +16,9 @@ router.get('/', function(req, res, next) {
     //starting page
     ctrl.setPageSession(req,id);
     if(line.start == 'true')
-        res.render("disp_silence.twig",{line:line});
+        res.render("disp_silence.twig",{line:line,maxId:ctrl.getLastId()});
     else
-        res.render("disp.twig",{line:line});
+        res.render("disp.twig",{line:line,maxId:ctrl.getLastId()});
 });
 
 
@@ -33,9 +33,9 @@ router.post('/', function(req, res, next) {
 
     ctrl.setPageSession(req,lineNext.id);
 if(lineNext.start == 'true')
-        res.render("disp_silence.twig",{line:lineNext});
+        res.render("disp_silence.twig",{line:lineNext,maxId:ctrl.getLastId()});
     else
-        res.render("disp.twig",{line:lineNext});
+        res.render("disp.twig",{line:lineNext,maxId:ctrl.getLastId()});
 });
 
 router.post('/check', function(req, res, next) {
