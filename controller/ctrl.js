@@ -75,6 +75,7 @@ ctrl.deleteRecord = function(id){
     }
 
     storage.setItemSync(i_pages,allPages);
+    storage.setItemSync(i_currId,currId-1);
 }
 
 ctrl.getAllrecord = function(){
